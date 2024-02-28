@@ -6,7 +6,7 @@ import Peer from 'simple-peer';
 const SocketContext = createContext();
 
 //const socket = io('http://localhost:3001/api/socket');
-const socket = io('http://localhost:3001');
+const socket = io('https://video-chat-app-f4z3.onrender.com');
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
@@ -27,6 +27,9 @@ const ContextProvider = ({ children }) => {
 
         myVideo.current.srcObject = currentStream;
       });
+    socket.on('me', (id) => {
+      me.current = id;
+    });
     socket.on('callUser', ({ from, name: callerName, signal }) => {
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
