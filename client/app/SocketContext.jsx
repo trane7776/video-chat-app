@@ -65,9 +65,6 @@ const ContextProvider = ({ children }) => {
       initiator: true,
       trickle: false,
       stream,
-      config: {
-        iceServers: [{ urls: 'stun:stun.arkh-edu.ru:3478' }],
-      },
     });
 
     peer.on('signal', (data) => {
