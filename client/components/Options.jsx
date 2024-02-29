@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Assignment, Phone, PhoneDisabled } from '@mui/icons-material';
-
+import copy from 'clipboard-copy';
 import { SocketContext } from '../app/SocketContext';
 const styles = {
   root: {
@@ -41,11 +41,24 @@ const Options = ({ children }) => {
   const { me, callAccepted, name, setName, leaveCall, callUser, callEnded } =
     useContext(SocketContext);
   const [idToCall, setIdToCall] = useState('');
-  console.log(me);
+  const [isCopied, setIsCopied] = useState(false);
+  const handleCopyClick = async () => {
+    try {
+      await copy(me.current);
+      setIsCopied(true);
+    } catch (error) {
+      console.error('Failed to copy text to clipboard', error);
+    }
+  };
   return (
     <Container sx={styles.container}>
       <Paper elevation={10} sx={styles.paper}>
         <form style={styles.root} noValidate autoComplete="off">
+          <Typography variant="h7" gutterBottom>
+            {me.current
+              ? `Ваш айди загружен: ${me.current}`
+              : 'Ваш айди не готов'}
+          </Typography>
           <Grid container sx={styles.gridContainer}>
             <Grid item xs={12} md={7} sx={styles.padding}>
               <Typography variant="h6" gutterBottom>
@@ -57,16 +70,17 @@ const Options = ({ children }) => {
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
               />
-              <CopyToClipboard text={me.current} sx={styles.margin}>
-                <Button
-                  variant="contained"
-                  className="bg-blue-500 hover:bg-blue-700 text-white "
-                  fullWidth
-                  startIcon={<Assignment fontSize="large" />}
-                >
-                  Копировать айди
-                </Button>
-              </CopyToClipboard>
+
+              <Button
+                variant="contained"
+                className="bg-blue-500 hover:bg-blue-700 text-white "
+                fullWidth
+                startIcon={<Assignment fontSize="large" />}
+                onClick={handleCopyClick}
+                sx={styles.margin}
+              >
+                {isCopied ? 'Скопировано!' : 'Копировать айди'}
+              </Button>
             </Grid>
             <Grid item xs={12} md={5} sx={styles.padding}>
               <Typography variant="h6" gutterBottom>
@@ -78,6 +92,7 @@ const Options = ({ children }) => {
                 onChange={(e) => setIdToCall(e.target.value)}
                 fullWidth
               />
+
               {callAccepted && !callEnded ? (
                 <Button
                   variant="contained"
