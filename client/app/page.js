@@ -3,6 +3,7 @@ import VideoPlayer from '../components/VideoPlayer';
 import Options from '../components/Options';
 import Notifications from '../components/Notifications';
 import { ContextProvider } from '@/app/SocketContext';
+import NavBar from '@/components/NavBar';
 export default function Home() {
   const styles = {
     wrapper: {
