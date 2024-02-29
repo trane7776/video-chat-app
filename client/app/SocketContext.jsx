@@ -2,18 +2,36 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
-
+const stunLink =
+  'https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt';
 const SocketContext = createContext();
 
 //const socket = io('http://localhost:3001/api/socket');
 const socket = io('https://video-chat-app-f4z3.onrender.com');
+function fetchIceServers() {
+  fetch(
+    'https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt'
+  )
+    .then((response) => response.text())
+    .then((data) => {
+      // Разбиваем текст на строки
+      console.log(data);
+      const lines = data.split('\n');
 
+      // Создаем массив объектов конфигурации ICE серверов
+      const iceServers = lines.map((line) => {
+        return { urls: `stun:${line.trim()}` };
+      });
+      return iceServers;
+    });
+}
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
+  const [iceServers, setIceServers] = useState();
   const me = useRef();
   const myVideo = useRef();
   const userVideo = useRef();
@@ -39,12 +57,40 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   const answerCall = () => {
+    console.log(iceServers);
     setCallAccepted(true);
     console.log('ss');
     const peer = new Peer({
       initiator: false,
       trickle: false,
       stream,
+      config: {
+        iceServers: [
+          {
+            urls: 'stun:stun.relay.metered.ca:80',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:80',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:443',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+        ],
+      },
     });
     console.log('sss');
     peer.on('signal', (data) => {
@@ -65,6 +111,33 @@ const ContextProvider = ({ children }) => {
       initiator: true,
       trickle: false,
       stream,
+      config: {
+        iceServers: [
+          {
+            urls: 'stun:stun.relay.metered.ca:80',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:80',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:80?transport=tcp',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turn:standard.relay.metered.ca:443',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+          {
+            urls: 'turns:standard.relay.metered.ca:443?transport=tcp',
+            username: 'b65d8e73890bedbc719cde44',
+            credential: 'Ne7dq9WoPWgxZfWH',
+          },
+        ],
+      },
     });
 
     peer.on('signal', (data) => {
