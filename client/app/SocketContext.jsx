@@ -43,7 +43,7 @@ const ContextProvider = ({ children }) => {
     console.log('ss');
     const peer = new Peer({
       initiator: false,
-      trickle: false,
+      trickle: true,
       stream,
       config: {
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
@@ -66,7 +66,7 @@ const ContextProvider = ({ children }) => {
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
-      trickle: false,
+      trickle: true,
       stream,
       config: {
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
