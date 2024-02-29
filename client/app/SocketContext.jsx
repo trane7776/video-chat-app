@@ -46,23 +46,7 @@ const ContextProvider = ({ children }) => {
       trickle: false,
       stream,
       config: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun2.l.google.com:19302' },
-          { urls: 'stun:stun3.l.google.com:19302' },
-          { urls: 'stun:stun4.l.google.com:19302' },
-          {
-            url: 'turn:turn.bistri.com:80',
-            credential: 'homeo',
-            username: 'homeo',
-          },
-          {
-            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-            credential: 'webrtc',
-            username: 'webrtc',
-          },
-        ],
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       },
     });
     console.log('sss');
@@ -85,23 +69,7 @@ const ContextProvider = ({ children }) => {
       trickle: false,
       stream,
       config: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun2.l.google.com:19302' },
-          { urls: 'stun:stun3.l.google.com:19302' },
-          { urls: 'stun:stun4.l.google.com:19302' },
-          {
-            url: 'turn:turn.bistri.com:80',
-            credential: 'homeo',
-            username: 'homeo',
-          },
-          {
-            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-            credential: 'webrtc',
-            username: 'webrtc',
-          },
-        ],
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
       },
     });
 
