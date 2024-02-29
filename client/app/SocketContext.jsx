@@ -43,8 +43,11 @@ const ContextProvider = ({ children }) => {
     console.log('ss');
     const peer = new Peer({
       initiator: false,
-      trickle: false,
+      trickle: true,
       stream,
+      config: {
+        iceServers: [{ urls: 'stun:193.28.184.4:3478' }],
+      },
     });
     console.log('sss');
     peer.on('signal', (data) => {
@@ -63,8 +66,11 @@ const ContextProvider = ({ children }) => {
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
-      trickle: false,
+      trickle: true,
       stream,
+      config: {
+        iceServers: [{ urls: 'stun:193.28.184.4:3478' }],
+      },
     });
 
     peer.on('signal', (data) => {
