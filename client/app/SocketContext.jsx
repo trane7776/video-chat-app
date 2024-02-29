@@ -43,7 +43,7 @@ const ContextProvider = ({ children }) => {
     console.log('ss');
     const peer = new Peer({
       initiator: false,
-      trickle: true,
+      trickle: false,
       stream,
       config: {
         iceServers: [
@@ -92,7 +92,7 @@ const ContextProvider = ({ children }) => {
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
-      trickle: true,
+      trickle: false,
       stream,
       config: {
         iceServers: [
