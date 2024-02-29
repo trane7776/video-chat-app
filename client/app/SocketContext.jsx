@@ -41,7 +41,17 @@ const ContextProvider = ({ children }) => {
   const answerCall = () => {
     setCallAccepted(true);
     console.log('ss');
-    const peer = new Peer({ initiator: false, trickle: false, stream });
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+        ],
+      },
+    });
     console.log('sss');
     peer.on('signal', (data) => {
       socket.emit('answerCall', { signal: data, to: call.from });
@@ -57,7 +67,17 @@ const ContextProvider = ({ children }) => {
   };
 
   const callUser = (id) => {
-    const peer = new Peer({ initiator: true, trickle: false, stream });
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+        ],
+      },
+    });
 
     peer.on('signal', (data) => {
       socket.emit('callUser', {

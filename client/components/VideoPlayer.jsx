@@ -50,7 +50,13 @@ const VideoPlayer = () => {
               {call.name || 'Аноним'}
             </Typography>
 
-            <video className="video" playsInline ref={userVideo} autoPlay />
+            <video
+              className="video"
+              playsInline
+              ref={userVideo}
+              autoPlay
+              src=""
+            />
           </div>
         </Paper>
       )}
