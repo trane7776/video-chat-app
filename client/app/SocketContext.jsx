@@ -77,7 +77,7 @@ const ContextProvider = ({ children }) => {
       socket.emit('answerCall', {
         signal: data,
         to: call.from,
-        name: call.name,
+        name,
       });
     });
 
@@ -141,7 +141,7 @@ const ContextProvider = ({ children }) => {
 
     socket.on('callAccepted', (data) => {
       setCallAccepted(true);
-      console.log(data);
+      setCall({ name: data.name });
       peer.signal(data.signal);
     });
 
