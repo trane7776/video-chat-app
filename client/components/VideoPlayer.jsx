@@ -19,7 +19,7 @@ const styles = {
 const VideoPlayer = () => {
   const { name, callAccepted, myVideo, userVideo, callEnded, stream, call } =
     useContext(SocketContext);
-
+  console.log(call);
   return (
     <div className="flex flex-row flex-wrap justify-center">
       {/* Our own video */}

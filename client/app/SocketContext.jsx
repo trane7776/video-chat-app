@@ -2,36 +2,18 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
-const stunLink =
-  'https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt';
+
 const SocketContext = createContext();
 
 //const socket = io('http://localhost:3001/api/socket');
 const socket = io('https://video-chat-app-f4z3.onrender.com');
-function fetchIceServers() {
-  fetch(
-    'https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_hosts.txt'
-  )
-    .then((response) => response.text())
-    .then((data) => {
-      // Разбиваем текст на строки
-      console.log(data);
-      const lines = data.split('\n');
 
-      // Создаем массив объектов конфигурации ICE серверов
-      const iceServers = lines.map((line) => {
-        return { urls: `stun:${line.trim()}` };
-      });
-      return iceServers;
-    });
-}
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
-  const [iceServers, setIceServers] = useState();
   const me = useRef();
   const myVideo = useRef();
   const userVideo = useRef();
@@ -48,8 +30,8 @@ const ContextProvider = ({ children }) => {
     socket.on('me', (id) => {
       me.current = id;
     });
-    socket.on('callUser', ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
+    socket.on('callUser', ({ from, name, signal }) => {
+      setCall({ isReceivingCall: true, from, name, signal });
     });
     if (socket.id) {
       me.current = socket.id;
@@ -57,9 +39,8 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   const answerCall = () => {
-    console.log(iceServers);
     setCallAccepted(true);
-    console.log('ss');
+
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -92,7 +73,6 @@ const ContextProvider = ({ children }) => {
         ],
       },
     });
-    console.log('sss');
     peer.on('signal', (data) => {
       socket.emit('answerCall', { signal: data, to: call.from });
     });
@@ -151,12 +131,14 @@ const ContextProvider = ({ children }) => {
 
     peer.on('stream', (currentStream) => {
       userVideo.current.srcObject = currentStream;
+      console.log(currentStream);
+      console.log(call);
     });
 
-    socket.on('callAccepted', (signal) => {
+    socket.on('callAccepted', (data) => {
       setCallAccepted(true);
-
-      peer.signal(signal);
+      console.log(data);
+      peer.signal(data.signal);
     });
 
     connectionRef.current = peer;
